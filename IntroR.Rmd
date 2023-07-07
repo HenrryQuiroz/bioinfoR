@@ -113,4 +113,25 @@ summary(irislm)
 library(ggplot2); library(dplyr)
 iris %>% ggplot(aes(x= Petal.Width, y = Petal.Length)) + geom_point() + geom_smooth(method = "lm") + theme_light() + facet_grid(Species ~ ., scales = "free")
 ```
+Con un 95% de confianza se aceptan los valores de $\beta:0$ y $\beta:1$. Cuando no existe medida del ancho del pétalos, la medida del largo es de 1.08mm (biológicamente no es posible). Por cada 2.22mm de camvio en el largo del pétalo el ancho cambio en 1mm.
 
+### Actividad
+Rèplica de la regresión lineal en la data de palmer penguis.
+
+```{r palmer}
+library(palmerpenguins)
+data(package = 'palmerpenguins')
+head(penguins)
+```
+```{r penguins_lm}
+library(ggplot2); library(dplyr)
+penguins %>% ggplot(aes(x= penguins$flipper_length_mm, y = penguins$body_mass_g)) + geom_point() + geom_smooth(method = "lm") + theme_light()
+```
+
+
+```{r lm_penguins}
+pinguinslm = lm(flipper_length_mm ~ body_mass_g, data = penguins)
+summary(pinguinslm)
+```
+
+$$ PL = 1.08 + 2.22 \cdot PW + \epsilon$$
