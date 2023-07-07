@@ -91,4 +91,26 @@ library(ggplot2)
 
 gbtemp %>% ggplot(aes(x = SEASON, y = MEASUREMENT, color = SEASON)) + geom_boxplot() + geom_jitter(size = 0.05) + theme_classic()
 ```
+## Análisis de regresión (efectos)
+$H_0: \beta_1 = 0$ No hay cambio del largo del sépalo debido al ancho del pètalo
+
+$H_0: \beta_1 \neq 0$ Existe cambio del largo del sépalo debido al ancho del pètalo
+
+```{r lm}
+head(iris)
+irislm = lm(Sepal.Length ~ Sepal.Width, data =iris)
+summary(irislm)
+```
+```{r visual2}
+plot(x= iris$Sepal.Width, y = iris$Sepal.Length)
+```
+```{r petal}
+plot(x= iris$Petal.Width, y = iris$Petal.Length)
+irislm = lm(Petal.Length ~ Petal.Width, data =iris)
+summary(irislm)
+```
+```{r vis_iris}
+library(ggplot2); library(dplyr)
+iris %>% ggplot(aes(x= Petal.Width, y = Petal.Length)) + geom_point() + geom_smooth(method = "lm") + theme_light() + facet_grid(Species ~ ., scales = "free")
+```
 
