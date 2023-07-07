@@ -1,0 +1,94 @@
+---
+title: "Clase 06/07/2023"
+author: "Quiroz Henrry"
+date: "2023-07-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción a R
+
+## Vectores
+```{r dormirh}
+# Vector con números
+dormirH <- c(8, 6, 4, 5, 10)
+mean(dormirH)
+sd(dormirH)
+
+# Vector con nombres
+nombres <- c("Moises", "MIka", "Dorian", "Ranier", "Henrry")
+nombres
+```
+
+## Listas
+
+```{r Listas}
+Hdormir = list(nombre = nombres,
+              horas = dormirH)
+Hdormir
+
+Hdormir$horas[2]
+```
+## Dataframe 
+```{r tablas}
+df_dormir <- data.frame(cbind(nombres, dormirH))
+df_dormir
+```
+## Leer datos externos
+
+```{r leerExt}
+gbtemp <- read.csv("data/gbtemp.csv", header = TRUE, sep = ",")
+head(gbtemp, 3)
+```
+
+
+### Exploración
+
+```{r explor_gbtemp}
+str(gbtemp)
+```
+```{r summary_gbtemp}
+summary(gbtemp)
+```
+## Análisi
+
+### Comparación (Prueba de hipótesis)
+$H_0: \mu_w = \mu_su = \mu_sp = \mu_f$ No existe diferenic en las medidas asociadas a la temporada.
+$H_a: \mu_w \neq \mu_su \neq \mu_sp \neq \mu_f$
+
+```{r gbtem_hip}
+gbtemp$SEASON <- as.factor(gbtemp$SEASON)
+str(gbtemp)
+
+library(dplyr)
+gbtemp %>% group_by(SEASON) %>% 
+  summarise(mean_meas = mean(MEASUREMENT))
+```
+
+### Análisis de varianzas (aov, ANOVA)
+
+```{r aov}
+aov(MEASUREMENT ~ SEASON, data = gbtemp)
+summary(aov(MEASUREMENT ~ SEASON, data = gbtemp))
+```
+
+Con una confianza del 95% existe diferencia de la medida en almenos una de las estaciones.
+
+#### Análisi posteroir del ANOVA
+
+```{r post_gbtemp}
+aov_gbtemp <- aov(MEASUREMENT ~ SEASON, data = gbtemp)
+TukeyHSD(aov_gbtemp, "SEASON", inherits = FALSE)
+
+```
+
+```{r visual}
+library(ggplot2)
+
+gbtemp %>% ggplot(aes(x = SEASON, y = MEASUREMENT, color = SEASON)) + geom_boxplot() + geom_jitter(size = 0.05) + theme_classic()
+```
+
