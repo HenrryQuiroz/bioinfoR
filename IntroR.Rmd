@@ -117,15 +117,18 @@ Con un 95% de confianza se aceptan los valores de $\beta:0$ y $\beta:1$. Cuando 
 
 ### Actividad
 Rèplica de la regresión lineal en la data de palmer penguis.
+$H_0: \beta_1 = 0$ No hay cambio en la longuitud de la aleta del pingüino debido a la masa corporal.
+
+$H_0: \beta_1 \neq 0$ Existe cambio en la longuitud de la aleta del pingüino debido a la masa corporal.
 
 ```{r palmer}
 library(palmerpenguins)
 data(package = 'palmerpenguins')
 head(penguins)
 ```
-```{r penguins_lm}
+```{r visual_pinguins}
 library(ggplot2); library(dplyr)
-penguins %>% ggplot(aes(x= penguins$flipper_length_mm, y = penguins$body_mass_g)) + geom_point() + geom_smooth(method = "lm") + theme_light()
+penguins %>% ggplot(aes(x= flipper_length_mm, y = body_mass_g)) + geom_point() + geom_smooth(method = "lm") + theme_light()
 ```
 
 
@@ -133,5 +136,8 @@ penguins %>% ggplot(aes(x= penguins$flipper_length_mm, y = penguins$body_mass_g)
 pinguinslm = lm(flipper_length_mm ~ body_mass_g, data = penguins)
 summary(pinguinslm)
 ```
+Con un 95% de confianza se aceptan los valores de $\beta:0$ y $\beta:1$. 
+Cuando no existe medida en la longuitud de la aleta, la medida del la masa corporal cambia en $1.367e^2$ (Biologicamente imposible). Por cada $1.528e^-2$ mm de cambio en la longuitud de la aleta la masa corporal cambia en $1.367e^2$.
+Por tanto
 
-$$ PL = 1.08 + 2.22 \cdot PW + \epsilon$$
+$$ PL = 1.367e^2 + 1.528e^-2 \cdot PW + \epsilon$$
